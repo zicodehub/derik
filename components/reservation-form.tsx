@@ -312,8 +312,8 @@ export function ReservationForm() {
                         <li>
                           Effectuez un transfert sur le compte Paypal suivant : 
                           <ul className="list-disc pl-4 my-2" >
-                            <li className="font-light" >MARGUET MAGLOIRE DURANT</li>
-                            <li className="font-bold" >talzar@gmail.com</li>
+                            <li className="font-light" >KARINE DANIELLE RENARD</li>
+                            <li className="font-bold" >drenard626@gmail.com</li>
                           </ul>
                         </li>
                         <li>Faites une capture d'écran de votre transaction.</li>
