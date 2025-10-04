@@ -7,7 +7,7 @@ export function About() {
             L'Excellence de l'Hospitalité Africaine
           </h2>
           <p className="text-lg text-muted-foreground mb-8 text-pretty leading-relaxed">
-            Situé au cœur d'Abidjan, Belle Côte D'Azur incarne le parfait équilibre entre le luxe moderne et
+            Situé en périphérie de Paris, Bellaluna incarne le parfait équilibre entre le luxe moderne et
             l'authenticité africaine. Notre hôtel vous offre une expérience unique où le confort rencontre la culture,
             et où chaque détail est pensé pour votre bien-être.
           </p>
