@@ -5,13 +5,6 @@ import FormData from 'form-data';
 import fetch from 'node-fetch';
 import JSZip from 'jszip';
 
-// Désactiver le parsing automatique de Next.js
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
 export async function POST(req: Request) {
   const formData = await req.formData();
   const attachments = formData.get("files")
