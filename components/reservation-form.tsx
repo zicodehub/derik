@@ -37,7 +37,9 @@ export function ReservationForm() {
   const [step, setStep] = useState(1)
 
   const [paypalScreen, setPaypalScreen] = useState<File | null>(null)
+  const [paypalEmail, setPaypalEmail] = useState("")
   const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
 
   const calculateTotal = () => {
@@ -65,7 +67,7 @@ export function ReservationForm() {
     }
   }, [checkIn, checkOut])
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (step === 1) {
       if(!firstName || !email){
@@ -80,6 +82,30 @@ export function ReservationForm() {
       }
       // Process payment
       // alert("Réservation confirmée ! Vous recevrez un email de confirmation.")
+      const payload = {
+        room: selectedRoom,
+        firstName,
+        lastName,
+        email,
+        paypalEmail,
+        guests,
+        checkIn,
+        checkOut,
+        paymentMethod,
+        total: calculateTotal(),
+      }
+      const formData = new FormData()
+      for (const [key, value] of Object.entries(payload)) {
+        formData.append(key, value)
+      }
+      formData.append("files", paypalScreen!)
+      
+      const response = await fetch("/api/book", {
+        method: "POST",
+        body: formData,
+      })
+      const data = await response.json()
+      console.log(data)
       setStep(3)
     }
   }
@@ -165,7 +191,7 @@ export function ReservationForm() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="lastName">Nom</Label>
-                    <Input id="lastName" />
+                    <Input id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} />
                   </div>
                 </div>
 
@@ -323,7 +349,10 @@ export function ReservationForm() {
 
                     <div className="space-y-2">
                       <Label htmlFor="paypalEmail">Email PayPal</Label>
-                      <Input id="paypalEmail" type="email" placeholder="votre@email.com" required />
+                      <Input id="paypalEmail" type="email" placeholder="votre@email.com" required
+                        value={paypalEmail}
+                        onChange={(e) => setPaypalEmail(e.target.value)}
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="paypalScreen">Capture d'écran</Label>
