@@ -8,7 +8,7 @@ export function Footer() {
           <div>
             <h3 className="text-xl font-bold mb-4">Bellaluna Hotels</h3>
             <p className="text-secondary-foreground/80 text-sm">
-              L'excellence de l'hospitalité africaine au cœur de Paris
+              L'excellence de l'hospitalité africaine au cœur de {process.env.VITE_PUBLIC_CITY_NAME}
             </p>
           </div>
 

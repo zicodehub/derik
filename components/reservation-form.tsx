@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { CalendarIcon, CreditCard, Smartphone, Wallet } from "lucide-react"
+import { BanknoteIcon, CalendarIcon, CreditCard, Loader, Smartphone, Wallet } from "lucide-react"
 import { format } from "date-fns"
 import { fr } from "date-fns/locale"
 import { cn } from "@/lib/utils"
@@ -25,6 +25,7 @@ const paymentMethods = [
   { id: "mobile-money", name: "Mobile Money", icon: Smartphone, isActive: false },
   { id: "paypal", name: "PayPal", icon: Wallet, isActive: true },
   { id: "card", name: "Carte Bancaire", icon: CreditCard, isActive: false },
+  { id: "bank", name: "Virement bancaire", icon: BanknoteIcon, isActive: true },
 ]
 const totalSteps = 3
 
@@ -35,6 +36,7 @@ export function ReservationForm() {
   const [guests, setGuests] = useState("1")
   const [paymentMethod, setPaymentMethod] = useState()
   const [step, setStep] = useState(1)
+  const [isSubmiting, setIsSubmiting] = useState(false)
 
   const [paypalScreen, setPaypalScreen] = useState<File | null>(null)
   const [paypalEmail, setPaypalEmail] = useState("")
@@ -81,31 +83,39 @@ export function ReservationForm() {
         return
       }
       // Process payment
-      // alert("Réservation confirmée ! Vous recevrez un email de confirmation.")
-      const payload = {
-        room: selectedRoom,
-        firstName,
-        lastName,
-        email,
-        paypalEmail,
-        guests,
-        checkIn,
-        checkOut,
-        paymentMethod,
-        total: calculateTotal(),
-      }
-      const formData = new FormData()
-      for (const [key, value] of Object.entries(payload)) {
-        formData.append(key, value)
-      }
-      formData.append("files", paypalScreen!)
+      setIsSubmiting(true)
       
-      const response = await fetch("/api/book", {
-        method: "POST",
-        body: formData,
-      })
-      const data = await response.json()
-      console.log(data)
+      try {
+        const payload = {
+          room: selectedRoom,
+          firstName,
+          lastName,
+          email,
+          paypalEmail,
+          guests,
+          checkIn,
+          checkOut,
+          paymentMethod,
+          total: calculateTotal(),
+        }
+        const formData = new FormData()
+        for (const [key, value] of Object.entries(payload)) {
+          formData.append(key, value)
+        }
+        formData.append("files", paypalScreen!)
+        
+        const response = await fetch("/api/book", {
+          method: "POST",
+          body: formData,
+        })
+        const data = await response.json()
+        console.log(data)
+      } catch (error) {
+        console.log(error)
+        setIsSubmiting(false)
+      } finally {
+        setIsSubmiting(false)
+      }
       setStep(3)
     }
   }
@@ -338,8 +348,8 @@ export function ReservationForm() {
                         <li>
                           Effectuez un transfert sur le compte Paypal suivant : 
                           <ul className="list-disc pl-4 my-2" >
-                            <li className="font-light" >KARINE DANIELLE RENARD</li>
-                            <li className="font-bold" >drenard626@gmail.com</li>
+                            <li className="font-light" >MME LOISEL MICHELE</li>
+                            <li className="font-bold" >Michele.loisel1957@gmail.com</li>
                           </ul>
                         </li>
                         <li>Faites une capture d'écran de votre transaction.</li>
@@ -354,6 +364,52 @@ export function ReservationForm() {
                         onChange={(e) => setPaypalEmail(e.target.value)}
                       />
                     </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="paypalScreen">Capture d'écran</Label>
+                      <Input id="paypalScreen" type="file" required placeholder="Selectionnez une capture d'écran" accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0]
+                          setPaypalScreen(file)
+                        }} 
+                      />
+                    </div>
+                    {/* Display preview */}
+                    {
+                      paypalScreen && (
+                        <div className="mt-4">
+                          <p>Preview:</p>
+                          <img src={URL.createObjectURL(paypalScreen)} className="mt-2 w-64 h-64 object-cover rounded-lg" />
+                        </div>
+                      )
+                    }
+                  </div>
+                )}
+
+                {paymentMethod === "bank" && (
+                  <div className="space-y-4 border-t pt-6">
+                    
+
+                    <div className="bg-slate-200 p-4 rounded-lg space-y-4 font-light" >
+                      <div className="flex flex-col gap-1">
+                        <p>IBAN - Identifiant International de compte</p>
+                        <p className="font-bold">FR45 2004 1010 1620 3557 9C03 736</p>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <p>BIC - Identifiant Bancaire Central</p>
+                        <p className="font-bold">BNPFPARIBA</p>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <p>DOMICILIATION</p>
+                        <p className="font-bold">LA BANQUE POSTALE • CENTRE FINANCIEr 33900 BORDEAUX CEDEX •</p>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <p>TITULAIRE DU COMPTE</p>
+                        <p className="font-bold">MME lOISEL MICHELE</p>
+                      </div>
+                    </div>
+
+
+                    <p className="font-light text-orange-500" >Une fois votre paiement effectué, veuillez nous envoyer une capture d'écran de votre transaction.</p>
                     <div className="space-y-2">
                       <Label htmlFor="paypalScreen">Capture d'écran</Label>
                       <Input id="paypalScreen" type="file" required placeholder="Selectionnez une capture d'écran" accept="image/*"
@@ -416,7 +472,7 @@ export function ReservationForm() {
                     disabled={step === 1 ? !checkIn || !checkOut || !selectedRoom : !paymentMethod}
                     onClick={onSubmit}
                   >
-                    {step === 1 ? "Continuer" : "Confirmer ma réservartion"}
+                    {isSubmiting ? <Loader className="animate-spin" /> : step === 1 ? "Continuer" : "Confirmer ma réservartion"}
                   </Button>
                 )
               }

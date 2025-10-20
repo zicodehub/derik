@@ -24,9 +24,9 @@ export function Contact() {
               <div>
                 <h3 className="text-xl font-semibold text-foreground mb-2">Adresse</h3>
                 <p className="text-muted-foreground">
-                  Boulevard de la République
+                  {process.env.VITE_PUBLIC_STREET_ADDRESS}
                   <br />
-                  Paris
+                  {process.env.VITE_PUBLIC_CITY_NAME}
                 </p>
               </div>
             </div>
@@ -38,9 +38,9 @@ export function Contact() {
               <div>
                 <h3 className="text-xl font-semibold text-foreground mb-2">Téléphone</h3>
                 <p className="text-muted-foreground">
-                  +33 6 20 12 34 56
+                  {process.env.VITE_PUBLIC_PHONE_NUMBER}
                   <br />
-                  +33 6 08 09 10 11
+                  {process.env.VITE_PUBLIC_PHONE_NUMBER_2}
                 </p>
               </div>
             </div>

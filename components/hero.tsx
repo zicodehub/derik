@@ -15,7 +15,7 @@ export function Hero() {
         <div className="max-w-4xl mx-auto">
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 text-balance">Bienvenue à Bellaluna Hotel</h1>
           <p className="text-xl md:text-2xl text-white/90 mb-8 text-pretty">
-            Découvrez l'hospitalité africaine dans un cadre luxueux au cœur de Paris
+            Découvrez l'hospitalité africaine dans un cadre luxueux au cœur de {process.env.VITE_PUBLIC_CITY_NAME}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="/reservation">

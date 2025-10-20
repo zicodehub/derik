@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
 import Link from "next/link"
 
-export function Header() {
+export function Header(props: any) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const scrollToSection = (id: string) => {
@@ -28,7 +28,7 @@ export function Header() {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-foreground">Bellaluna Hotels</h1>
-                <p className="text-xs text-muted-foreground">Paris, France</p>
+                <p className="text-xs text-muted-foreground">{props.city}, {props.country}</p>
               </div>
             </div>
           </a>

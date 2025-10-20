@@ -9,7 +9,10 @@ import { Footer } from "@/components/footer"
 export default function Home() {
   return (
     <main className="min-h-screen">
-      <Header />
+      <Header 
+        city={process.env.VITE_PUBLIC_CITY_NAME}
+        country={process.env.VITE_PUBLIC_COUNTRY_NAME}
+      />
       <Hero />
       <About />
       <Rooms />
