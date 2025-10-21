@@ -249,7 +249,7 @@ export function ReservationForm() {
                   <div className="border-t pt-3 mt-3">
                     <div className="flex justify-between items-center">
                       <span className="font-semibold">Total à payer</span>
-                      <span className="text-2xl font-bold text-primary">{calculateTotal().toLocaleString()} FCFA</span>
+                      <span className="text-2xl font-bold text-primary">{calculateTotal().toLocaleString()} €</span>
                     </div>
                   </div>
                 </div>
